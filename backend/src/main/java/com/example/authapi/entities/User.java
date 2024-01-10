@@ -29,6 +29,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private Boolean isOnline;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Message> messages = new ArrayList<>();
@@ -118,5 +121,13 @@ public class User implements UserDetails {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Boolean getIsOnline() {
+        return this.isOnline;
+    }
+
+    public void setIsOnline(Boolean isOnline) {
+        this.isOnline = isOnline;
     }
 }

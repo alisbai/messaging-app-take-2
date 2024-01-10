@@ -6,8 +6,12 @@ import com.example.authapi.entities.User;
 import com.example.authapi.responses.LoginResponse;
 import com.example.authapi.services.AuthenticationService;
 import com.example.authapi.services.JwtService;
+import io.jsonwebtoken.lang.Maps;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RequestMapping("/auth")
 @RestController
@@ -36,14 +40,21 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
-        User authenticatedUser = authenticationService.authenticate(loginUserDto);
+        try {
+            User authenticatedUser = authenticationService.authenticate(loginUserDto);
 
-        String token = jwtService.generateToken(authenticatedUser);
+            String token = jwtService.generateToken(authenticatedUser);
 
-        LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setToken(token);
-        loginResponse.setExpiresIn(jwtService.getExpirationTime());
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setToken(token);
+            loginResponse.setExpiresIn(jwtService.getExpirationTime());
 
-        return ResponseEntity.ok(loginResponse);
+            return ResponseEntity.ok(loginResponse);
+
+        } catch (Exception e) {
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setError(Maps.of("error", "Something went wrong").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(loginResponse);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.authapi.configs;
 
 import com.example.authapi.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class ApplicationConfiguration {
     private final UserRepository userRepository;
 
+    @Autowired
     public ApplicationConfiguration(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

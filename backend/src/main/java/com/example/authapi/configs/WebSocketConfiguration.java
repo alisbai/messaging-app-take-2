@@ -14,7 +14,6 @@ package com.example.authapi.configs;
     import org.springframework.security.authorization.AuthorizationEventPublisher;
     import org.springframework.security.authorization.AuthorizationManager;
     import org.springframework.security.authorization.SpringAuthorizationEventPublisher;
-    import org.springframework.security.config.annotation.web.socket.EnableWebSocketSecurity;
     import org.springframework.security.messaging.access.intercept.AuthorizationChannelInterceptor;
     import org.springframework.security.messaging.access.intercept.MessageMatcherDelegatingAuthorizationManager;
     import org.springframework.security.messaging.context.AuthenticationPrincipalArgumentResolver;
@@ -53,7 +52,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("http://localhost:5173/");
+                .setAllowedOrigins("http://localhost:19006/");
     }
 
     @Override

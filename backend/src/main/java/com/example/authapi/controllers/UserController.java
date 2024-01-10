@@ -1,6 +1,7 @@
 package com.example.authapi.controllers;
 
 import com.example.authapi.entities.User;
+import com.example.authapi.responses.UserResponse;
 import com.example.authapi.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 @RestController
 public class UserController {
     private final UserService userService;
@@ -28,12 +29,6 @@ public class UserController {
         User authenticatedUser = (User) authentication.getPrincipal();
 
         return ResponseEntity.ok(authenticatedUser);
-    }
-
-    @GetMapping("/")
-    public ResponseEntity<List<User>> allUsers() {
-        List<User> users = userService.allUsers();
-        return ResponseEntity.ok(users);
     }
 
 }

@@ -7,13 +7,14 @@ import com.example.authapi.responses.LoginResponse;
 import com.example.authapi.services.AuthenticationService;
 import com.example.authapi.services.JwtService;
 import io.jsonwebtoken.lang.Maps;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@RequestMapping("/auth")
+@RequestMapping("/api/v1/auth")
 @RestController
 public class AuthenticationController {
     private final JwtService jwtService;
@@ -27,15 +28,20 @@ public class AuthenticationController {
 
     @PostMapping("/signup")
     public ResponseEntity<LoginResponse> register(@RequestBody RegisterUserDto registerUserDto) {
-        User registerUser = authenticationService.signup(registerUserDto);
+        try {
+            User registerUser = authenticationService.signup(registerUserDto);
+            String token = jwtService.generateToken(registerUser);
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setToken(token);
+            loginResponse.setExpiresIn(jwtService.getExpirationTime());
+            return ResponseEntity.ok(loginResponse);
+        } catch (DataIntegrityViolationException e) {
+            LoginResponse loginResponse = new LoginResponse();
+            loginResponse.setError(Maps.of("message", "Something went wrong, could not save user").build());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(loginResponse);
+        }
 
-        String token = jwtService.generateToken(registerUser);
 
-        LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setToken(token);
-        loginResponse.setExpiresIn(jwtService.getExpirationTime());
-
-        return ResponseEntity.ok(loginResponse);
     }
 
     @PostMapping("/login")
@@ -53,7 +59,7 @@ public class AuthenticationController {
 
         } catch (Exception e) {
             LoginResponse loginResponse = new LoginResponse();
-            loginResponse.setError(Maps.of("error", "Something went wrong").build());
+            loginResponse.setError(Maps.of("message", "Something went wrong").build());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(loginResponse);
         }
     }

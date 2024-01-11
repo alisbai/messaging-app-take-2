@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
   const getUser = async () => {
     setAppLoading(true);
     try {
-      const response = await api.get("/users/me");
+      const response = await api.get("api/v1/users/me");
       setUser(response.data);
       setAppLoading(false);
     } catch (error) {
@@ -33,7 +33,8 @@ export const AuthProvider = ({ children }) => {
   const authenticate = async ({ setErrors, action, ...props }) => {
     setIsLoading(true);
     await delay(1000);
-    const endpoint = action === "login" ? "/auth/login" : "auth/signup";
+    const endpoint =
+      action === "login" ? "api/v1/auth/login" : "api/v1/auth/signup";
     try {
       const response = await api.post(endpoint, props);
       await AsyncStorage.setItem("token", response.data.token);

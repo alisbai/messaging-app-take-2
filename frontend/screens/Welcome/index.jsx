@@ -12,11 +12,11 @@ function Welcome({ navigation }) {
       <Image source={gettingStartedImage} />
 
       <View style={styles.textContainer}>
-        <Text style={styles.title}>Never get lost with FYE</Text>
+        <Text style={styles.title}>Chat Savvy</Text>
 
         <Text style={styles.subtitle}>
-          The first-year experience phone app is all you need to have a smooth
-          and stress-free experience during your stay at AUI
+          Make friend from home, join our chatroom where you can meet wonderful
+          friends
         </Text>
       </View>
 
